@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>lab1</title>
+    <style>
+     * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+        
+        body {
+              background: url('Frame 1.png') center top/auto 55% no-repeat;
+                background-color: rgba(240, 250, 225, 1); /* Цвет фона */
+                min-height: 100vh;
+                width: 100%;
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+                color: #333;
+                line-height: 1.6;
+        }
+        
+        .hero-section {
+            
+             display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+         .top-level-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            width: 100%;
+            padding: 20px 0;
+        }
+        
+        
+        
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+        
+        header {
+           background-color: #556B2F;
+            color: white;
+            padding: 15px 0;
+        }
+        
+   
+    .content-container {
+        margin-top: 1000px; /* Подвиньте на нужную высоту */
+        background: rgba(240, 250, 225, 1);
+        padding: 30px;
+        
+    }
+
+    nav {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+  
+
+    nav a {
+        margin-right: 20px;
+        color: #000000;
+    }
+
+    a:hover {
+        color: orange;
+    }
+
+    ul {
+            list-style-type: none;
+            padding-left: 35px; /* Увеличенный отступ слева для списка */
+        }
+
+    a {
+        text-decoration: none;
+        color: aqua; /* Цвет навигации в вашем дизайне */
+    }
+
+    th, td {
+        border: 1px solid #000000;
+        padding: 8px;
+        text-align: left;
+    }
+
+    table {
+        width: 70%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+
+    footer {
+            background-color: #556B2F;
+            color: white;
+            text-align: center;
+            padding: 20px 0;
+            margin-top: auto;
+        }
+        
+    section {
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 25px;
+        color: #000000;
+    }
+</style>
+</head>
+<body>
+    <header>
+        <div class="hero-section">
+            <div class="logo">Food Construct</div>
+            <nav>
+                <a href="lab1.html" class="nav-link">Главная</a>
+                <a href="lab2.html" class="nav-link active">Собрать ланч</a>
+                <a href="#" class="nav-link">Заказы</a>
+                <a href="#contacts" class="nav-link">Контакты</a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="content-container">
+        <main>
+            <section>
+                <h2>О нас</h2>
+                <p>
+                    Food Construct - доставка бизнес-ланчей в Москве. Мы привезем вам горячую вкусную еду в любую точку города к назначенному времени.
+                </p>
+            </section>
+        </main>
+        
+        <section>
+            <h2>Преимущества Food Construct</h2>
+            <ul>
+                <li>Привозим обед к назначенному времени без опозданий</li>
+                <li>Надежно упаковываем блюда в удобные контейнеры бесплатно</li>
+                <li>Доставляем ланчи весь день с 7:00 до 23:00</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>Топ-5 популярных блюд</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>Название</th>
+                        <th>Кол-во заказов<br>в неделю</th>
+                        <th>Цена</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>Лазанья</td>
+                        <td>185</td>
+                        <td>385₽</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>Люля кебаб</td>
+                        <td>161</td>
+                        <td>365₽</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>Кагай щурпе</td>
+                        <td>144</td>
+                        <td>270₽</td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td>Хуплу</td>
+                        <td>132</td>
+                        <td>150₽</td>
+                    </tr>
+                    <tr>
+                        <td>5</td>
+                        <td>Котлеты из курицы<br>с картофельным пюре</td>
+                        <td>128</td>
+                        <td>225₽</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+    </div>
+
+    <footer class="bg-gray-800 text-white py-8 mt-auto">
+        <div id="contacts">
+            <p>2025 Solntseva Nastya Food Construct</p>
+            <ul class="social-links">
+                <li><a href="#" target="_blank">Telegram</a></li>
+            </ul>
+        </div>
+    </footer>
+</body>
+</html>
