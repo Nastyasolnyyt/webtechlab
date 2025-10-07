@@ -1,5 +1,6 @@
 // orderManager.js
 document.addEventListener('DOMContentLoaded', function() {
+    console.log('Order manager initialized');
     initializeOrderManager();
 });
 
@@ -11,12 +12,15 @@ function initializeOrderManager() {
         drink: null
     };
     
+    console.log('Current order initialized:', window.currentOrder);
+    
     // Добавляем обработчики событий для карточек блюд
     document.addEventListener('click', function(e) {
         // Обрабатываем клик по карточке или кнопке "Добавить"
         const dishCard = e.target.closest('.dish-card');
         if (dishCard) {
             const dishKeyword = dishCard.getAttribute('data-dish');
+            console.log('Dish clicked:', dishKeyword);
             addDishToOrder(dishKeyword);
             
             // Добавляем визуальное выделение
@@ -26,11 +30,13 @@ function initializeOrderManager() {
     
     // Обработчик для сброса формы
     document.querySelector('.reset-btn').addEventListener('click', function() {
+        console.log('Reset button clicked');
         resetOrder();
     });
     
     // Обработчик для отправки формы
     document.getElementById('order-form').addEventListener('submit', function(e) {
+        console.log('Form submitted');
         updateFormData();
     });
 }
@@ -47,17 +53,23 @@ function highlightSelectedDish(selectedCard, dishKeyword) {
     
     // Добавляем выделение выбранной карточке
     selectedCard.classList.add('selected');
+    console.log('Highlighted dish:', dishKeyword);
 }
 
 function addDishToOrder(dishKeyword) {
     const dish = dishes.find(d => d.keyword === dishKeyword);
-    if (!dish) return;
+    if (!dish) {
+        console.error('Dish not found:', dishKeyword);
+        return;
+    }
     
     // Определяем категорию блюда
     const category = dish.category;
     
     // Обновляем заказ
     window.currentOrder[category] = dish;
+    
+    console.log('Order updated:', window.currentOrder);
     
     // Обновляем отображение заказа
     updateOrderDisplay();
@@ -84,6 +96,7 @@ function updateOrderDisplay() {
             document.getElementById(`${category}-category`).style.display = 'none';
         });
         document.getElementById('order-total').style.display = 'none';
+        console.log('No selection - hiding categories');
         return;
     }
     
@@ -137,6 +150,7 @@ function updateOrderDisplay() {
     if (hasAnySelection) {
         totalPriceElement.textContent = `${totalPrice}₽`;
         orderTotalElement.style.display = 'block';
+        console.log('Total price updated:', totalPrice);
     }
 }
 
@@ -154,6 +168,8 @@ function resetOrder() {
         card.classList.remove('selected');
     });
     
+    console.log('Order reset');
+    
     // Обновляем отображение заказа
     updateOrderDisplay();
 }
@@ -168,4 +184,6 @@ function updateFormData() {
                       (window.currentOrder.main?.price || 0) + 
                       (window.currentOrder.drink?.price || 0);
     document.getElementById('total-price').value = totalPrice;
+    
+    console.log('Form data updated for submission');
 }
