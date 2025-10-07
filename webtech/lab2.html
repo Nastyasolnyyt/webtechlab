@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Food Construct - Собрать ланч</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="main.css">
+    <link rel="stylesheet" href="lunch.css">
+    
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <div class="logo">Food Construct</div>
+            <nav>
+                <a href="index.html" class="nav-link">Главная</a>
+                <a href="lab2.html" class="nav-link active">Собрать ланч</a>
+                <a href="#" class="nav-link">Заказы</a>
+                <a href="#contacts" class="nav-link">Контакты</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <h1>Собрать ланч</h1>
+        
+        <section>
+            <h2>Выберите суп</h2>
+            <div class="dishes-grid">
+                <div class="dish-card">
+                    <img src="photo/borsh.jpg" alt="Борщ" class="dish-image">
+                    <p class="dish-price">195₽</p>
+                    <p class="dish-name">Борщ</p>
+                    <p class="dish-weight">350 г</p>
+                    <button class="add-button">Добавить</button>
+                </div>
+                
+                <div class="dish-card">
+                    <img src="photo/gribi.png" alt="Грибной суп-пюре" class="dish-image">
+                    <p class="dish-price">185₽</p>
+                    <p class="dish-name">Грибной суп-пюре</p>
+                    <p class="dish-weight">330 г</p>
+                    <button class="add-button">Добавить</button>
+                </div>
+                
+                <div class="dish-card">
+                    <img src="photo/chsoup .jpg" alt="Сырный суп" class="dish-image">
+                    <p class="dish-price">270₽</p>
+                    <p class="dish-name">Сырный суп</p>
+                    <p class="dish-weight">330 г</p>
+                    <button class="add-button">Добавить</button>
+                </div>
+            </div>
+        </section>
+        
+        <section>
+            <h2>Выберите главное блюдо</h2>
+            <div class="dishes-grid">
+                <div class="dish-card">
+                    <img src="photo/lazanya.jpg" alt="Лазанья" class="dish-image">
+                    <p class="dish-price">385₽</p>
+                    <p class="dish-name">Лазанья</p>
+                    <p class="dish-weight">400 г</p>
+                    <button class="add-button">Добавить</button>
+                </div>
+                
+                <div class="dish-card">
+                    <img src="photo/lula.jpg" alt="Люля кебаб" class="dish-image">
+                    <p class="dish-price">365₽</p>
+                    <p class="dish-name">Люля кебаб</p>
+                    <p class="dish-weight">380 г</p>
+                    <button class="add-button">Добавить</button>
+                </div>
+                
+                <div class="dish-card">
+                    <img src="photo/purekotl.png" alt="Котлеты с пюре" class="dish-image">
+                    <p class="dish-price">225₽</p>
+                    <p class="dish-name">Котлеты с пюре</p>
+                    <p class="dish-weight">350 г</p>
+                    <button class="add-button">Добавить</button>
+                </div>
+            </div>
+        </section>
+        
+        <section>
+            <h2>Выберите напиток</h2>
+            <div class="dishes-grid">
+                <div class="dish-card">
+                    <img src="photo/applejuce.jpg" alt="Апельсиновый фреш" class="dish-image">
+                    <p class="dish-price">120₽</p>
+                    <p class="dish-name">Апельсиновый фреш</p>
+                    <p class="dish-weight">300 мл</p>
+                    <button class="add-button">Добавить</button>
+                </div>
+                
+                <div class="dish-card">
+                    <img src="photo/mangojuce.jpg" alt="Клюквенный морс" class="dish-image">
+                    <p class="dish-price">90₽</p>
+                    <p class="dish-name">Клюквенный морс</p>
+                    <p class="dish-weight">300 мл</p>
+                    <button class="add-button">Добавить</button>
+                </div>
+                
+                <div class="dish-card">
+                    <img src="photo/carjuce.jpg" alt="Морковный сок" class="dish-image">
+                    <p class="dish-price">110₽</p>
+                    <p class="dish-name">Морковный сок</p>
+                    <p class="dish-weight">300 мл</p>
+                    <button class="add-button">Добавить</button>
+                </div>
+            </div>
+        </section>
+    </main>
+        <!-- Форма заказа -->
+    <section class="order-form-section">
+        <div class="order-container">
+            <h2>Сделать заказ</h2>
+            
+            <form id="order-form" action="https://httpbin.org/post" method="POST">
+                <div class="form-columns">
+                    <!-- Блок с заказом -->
+                    <div class="order-block">
+                        <h3>Ваш заказ</h3>
+                        
+                        <div class="form-group">
+                            <label for="soup">Суп *</label>
+                            <select id="soup" name="soup" required>
+                                <option value="">– Выберите суп –</option>
+                                <option value="borsh">Борщ - 195₽</option>
+                                <option value="mushroom_soup">Грибной суп-пюре - 185₽</option>
+                                <option value="cheese_soup">Сырный суп - 270₽</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="main_dish">Главное блюдо *</label>
+                            <select id="main_dish" name="main_dish" required>
+                                <option value="">– Выберите главное блюдо –</option>
+                                <option value="lasagna">Лазанья - 385₽</option>
+                                <option value="lula_kebab">Люля кебаб - 365₽</option>
+                                <option value="cutlets_puree">Котлеты с пюре - 225₽</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="drink">Напиток *</label>
+                            <select id="drink" name="drink" required>
+                                <option value="">– Выберите напиток –</option>
+                                <option value="orange_juice">Апельсиновый фреш - 120₽</option>
+                                <option value="cranberry_juice">Клюквенный морс - 90₽</option>
+                                <option value="carrot_juice">Морковный сок - 110₽</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="comments">Комментарии к заказу</label>
+                            <textarea id="comments" name="comments" rows="4" placeholder="Ваши пожелания к заказу..."></textarea>
+                        </div>
+                    </div>
+                    
+                    <!-- Блок с данными клиента -->
+                    <div class="customer-block">
+                        <h3>Ваши данные</h3>
+                        
+                        <div class="form-group">
+                            <label for="name">Имя *</label>
+                            <input type="text" id="name" name="name" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="email">Email *</label>
+                            <input type="email" id="email" name="email" required>
+                        </div>
+                        
+                        <div class="form-group checkbox-group">
+                            <input type="checkbox" id="newsletter" name="newsletter" checked>
+                            <label for="newsletter">Получать информацию о скидках и акциях</label>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="phone">Номер телефона *</label>
+                            <input type="tel" id="phone" name="phone" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="address">Адрес доставки *</label>
+                            <input type="text" id="address" name="address" required placeholder="Доставка осуществляется только по Москве">
+                        </div>
+                        
+                       <div class="form-group">
+                        <label>Время доставки:</label>
+                        <div class="radio-group">
+                            <div class="radio-option">
+                                <input type="radio" id="delivery-time-now" name="delivery_time_option" value="now" required>
+                                <label for="delivery-time-now">Как можно скорее</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="delivery-time-specific" name="delivery_time_option" value="specific" required>
+                                <label for="delivery-time-specific">К указанному времени</label>
+                            </div>
+                        </div>
+                        
+                        <label for="delivery-time">Укажите время доставки</label>
+                        <input type="time" id="delivery-time" name="delivery_time" min="07:00" max="23:00" step="300">
+                    </div>
+                    </div>
+                </div>
+                
+                <div class="form-buttons">
+                    <button type="reset" class="reset-btn">Сбросить</button>
+                    <button type="submit" class="submit-btn">Отправить заказ</button>
+                </div>
+            </form>
+        </div>
+    </section>
+   <footer id="contacts">
+        <div class="footer-content">
+            <p>2025 Solntseva Nastya Food Construct</p>
+            <ul class="social-links">
+                <li><a href="#" target="_blank">Telegram</a></li>
+            </ul>
+        </div>
+    </footer>
+</body>
+</html>
