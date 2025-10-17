@@ -196,3 +196,38 @@ function updateFormData() {
     
     console.log('Form data updated for submission');
 }
+
+function validateOrderCombination() {
+    const currentOrder = window.currentOrder || {};
+    
+    // Проверяем основные блюда
+    const hasSoup = !!currentOrder.soup;
+    const hasMain = !!currentOrder.main;
+    const hasSalat = !!currentOrder.salat;
+    const hasDrink = !!currentOrder.drink;
+    const hasDessert = !!currentOrder.dessert;
+    
+    console.log('Order validation:', { hasSoup, hasMain, hasSalat, hasDrink, hasDessert });
+    
+    // Комбо 1: Суп + Главное + Салат + Напиток
+    const combo1 = hasSoup && hasMain && hasSalat && hasDrink;
+    
+    // Комбо 2: Суп + Главное + Напиток
+    const combo2 = hasSoup && hasMain && hasDrink;
+    
+    // Комбо 3: Суп + Салат + Напиток
+    const combo3 = hasSoup && hasSalat && hasDrink;
+    
+    // Комбо 4: Главное + Салат + Напиток
+    const combo4 = hasMain && hasSalat && hasDrink;
+    
+    // Комбо 5: Главное + Напиток
+    const combo5 = hasMain && hasDrink;
+    
+    // Десерт можно добавить к любому комбо
+    const hasValidCombo = combo1 || combo2 || combo3 || combo4 || combo5;
+    
+    console.log('Valid combo found:', hasValidCombo);
+    
+    return hasValidCombo;
+}

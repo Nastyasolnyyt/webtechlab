@@ -100,7 +100,7 @@ const dishes = [
         category: "main",
         count: "400 г",
         image: "photo/lazanya.jpg",
-        kind: "veg"
+        kind: "meat"
     },
     {
         keyword: "vegetables",
