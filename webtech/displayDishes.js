@@ -2,6 +2,7 @@
 document.addEventListener('DOMContentLoaded', function() {
     console.log('DOM loaded, starting to display dishes...');
     displayDishes();
+    initializeFilters();
 });
 
 function displayDishes() {
@@ -13,26 +14,49 @@ function displayDishes() {
         return;
     }
     
-    // Сортируем блюда по алфавиту
-    const sortedDishes = [...dishes].sort((a, b) => a.name.localeCompare(b.name));
-    console.log('Sorted dishes:', sortedDishes);
-    
     // Группируем блюда по категориям
     const dishesByCategory = {
-        soup: sortedDishes.filter(dish => dish.category === 'soup'),
-        main: sortedDishes.filter(dish => dish.category === 'main'),
-        drink: sortedDishes.filter(dish => dish.category === 'drink')
+        soup: dishes.filter(dish => dish.category === 'soup'),
+        main: dishes.filter(dish => dish.category === 'main'),
+        salat: dishes.filter(dish => dish.category === 'salat'),
+        drink: dishes.filter(dish => dish.category === 'drink'),
+        dessert: dishes.filter(dish => dish.category === 'dessert')
     };
     
     console.log('Dishes by category:', dishesByCategory);
     
     // Отображаем блюда для каждой категории
-    displayCategoryDishes('soup', 'Выберите суп', dishesByCategory.soup);
-    displayCategoryDishes('main', 'Выберите главное блюдо', dishesByCategory.main);
-    displayCategoryDishes('drink', 'Выберите напиток', dishesByCategory.drink);
+    displayCategoryWithFilters('soup', 'Выберите суп', dishesByCategory.soup, [
+        { name: 'рыбный', kind: 'fish' },
+        { name: 'мясной', kind: 'meat' },
+        { name: 'вегетарианский', kind: 'veg' }
+    ]);
+    
+    displayCategoryWithFilters('main', 'Выберите главное блюдо', dishesByCategory.main, [
+        { name: 'рыбное', kind: 'fish' },
+        { name: 'мясное', kind: 'meat' },
+        { name: 'вегетарианское', kind: 'veg' }
+    ]);
+    
+    displayCategoryWithFilters('salat', 'Салаты и стартеры', dishesByCategory.salat, [
+        { name: 'рыбный', kind: 'fish' },
+        { name: 'мясной', kind: 'meat' },
+        { name: 'вегетарианский', kind: 'veg' }
+    ]);
+    
+    displayCategoryWithFilters('drink', 'Выберите напиток', dishesByCategory.drink, [
+        { name: 'холодный', kind: 'cold' },
+        { name: 'горячий', kind: 'hot' }
+    ]);
+    
+    displayCategoryWithFilters('dessert', 'Выберите десерт', dishesByCategory.dessert, [
+        { name: 'маленькая порция', kind: 'small' },
+        { name: 'средняя порция', kind: 'medium' },
+        { name: 'большая порция', kind: 'large' }
+    ]);
 }
 
-function displayCategoryDishes(category, title, dishes) {
+function displayCategoryWithFilters(category, title, dishes, filters) {
     const mainElement = document.querySelector('main');
     
     if (!mainElement) {
@@ -42,15 +66,33 @@ function displayCategoryDishes(category, title, dishes) {
     
     // Создаем секцию
     const section = document.createElement('section');
+    section.id = `${category}-section`;
     
     // Создаем заголовок
     const heading = document.createElement('h2');
     heading.textContent = title;
     section.appendChild(heading);
     
+    // Создаем блок фильтров
+    const filtersContainer = document.createElement('div');
+    filtersContainer.className = 'filters';
+    filtersContainer.innerHTML = '<span>Фильтры:</span>';
+    
+    filters.forEach(filter => {
+        const filterButton = document.createElement('button');
+        filterButton.className = 'filter-btn';
+        filterButton.setAttribute('data-kind', filter.kind);
+        filterButton.setAttribute('data-category', category);
+        filterButton.textContent = filter.name;
+        filtersContainer.appendChild(filterButton);
+    });
+    
+    section.appendChild(filtersContainer);
+    
     // Создаем контейнер для карточек
     const grid = document.createElement('div');
     grid.className = 'dishes-grid';
+    grid.id = `${category}-grid`;
     
     // Создаем карточки для каждого блюда
     dishes.forEach(dish => {
@@ -61,13 +103,14 @@ function displayCategoryDishes(category, title, dishes) {
     section.appendChild(grid);
     mainElement.appendChild(section);
     
-    console.log(`Displayed ${dishes.length} ${category} dishes`);
+    console.log(`Displayed ${dishes.length} ${category} dishes with ${filters.length} filters`);
 }
 
 function createDishCard(dish) {
     const card = document.createElement('div');
     card.className = 'dish-card';
     card.setAttribute('data-dish', dish.keyword);
+    card.setAttribute('data-kind', dish.kind);
     
     card.innerHTML = `
         <img src="${dish.image}" alt="${dish.name}" class="dish-image">
@@ -78,4 +121,49 @@ function createDishCard(dish) {
     `;
     
     return card;
+}
+
+function initializeFilters() {
+    // Добавляем обработчики для фильтров
+    document.addEventListener('click', function(e) {
+        if (e.target.classList.contains('filter-btn')) {
+            const filterBtn = e.target;
+            const kind = filterBtn.getAttribute('data-kind');
+            const category = filterBtn.getAttribute('data-category');
+            
+            toggleFilter(filterBtn, kind, category);
+        }
+    });
+}
+
+function toggleFilter(filterBtn, kind, category) {
+    const grid = document.getElementById(`${category}-grid`);
+    const allFilterBtns = document.querySelectorAll(`[data-category="${category}"]`);
+    const allDishes = grid.querySelectorAll('.dish-card');
+    
+    // Если фильтр уже активен - снимаем фильтр
+    if (filterBtn.classList.contains('active')) {
+        filterBtn.classList.remove('active');
+        // Показываем все блюда
+        allDishes.forEach(dish => {
+            dish.style.display = 'block';
+        });
+    } else {
+        // Снимаем активный класс со всех фильтров этой категории
+        allFilterBtns.forEach(btn => {
+            btn.classList.remove('active');
+        });
+        
+        // Добавляем активный класс к выбранному фильтру
+        filterBtn.classList.add('active');
+        
+        // Фильтруем блюда
+        allDishes.forEach(dish => {
+            if (dish.getAttribute('data-kind') === kind) {
+                dish.style.display = 'block';
+            } else {
+                dish.style.display = 'none';
+            }
+        });
+    }
 }

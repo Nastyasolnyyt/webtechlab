@@ -26,6 +26,7 @@
         <!-- Секции с блюдами будут заполнены динамически через JavaScript -->
     </main>
 
+    
     <!-- Форма заказа -->
     <section class="order-form-section">
         <div class="order-container">
@@ -39,26 +40,40 @@
                         
                         <!-- Динамическое отображение выбранных блюд -->
                         <div id="order-display">
-                            <div class="order-summary">
-                                <p class="no-selection-message">Ничего не выбрано</p>
-                                <div class="order-category" id="soup-category" style="display: none;">
-                                    <h4>Суп</h4>
-                                    <p class="no-selection">Блюдо не выбрано</p>
-                                </div>
-                                <div class="order-category" id="main-category" style="display: none;">
-                                    <h4>Главное блюдо</h4>
-                                    <p class="no-selection">Блюдо не выбрано</p>
-                                </div>
-                                <div class="order-category" id="drink-category" style="display: none;">
-                                    <h4>Напиток</h4>
-                                    <p class="no-selection">Блюдо не выбрано</p>
-                                </div>
-                                <div class="order-total" id="order-total" style="display: none;">
-                                    <h4>Стоимость заказа</h4>
-                                    <p class="total-price">0₽</p>
-                                </div>
+                        <div class="order-summary">
+                            <p class="no-selection-message">Ничего не выбрано</p>
+                            
+                            <div class="order-category" id="soup-category" style="display: none;">
+                                <h4>Суп</h4>
+                                <p class="no-selection">Блюдо не выбрано</p>
+                            </div>
+                            
+                            <div class="order-category" id="main-category" style="display: none;">
+                                <h4>Главное блюдо</h4>
+                                <p class="no-selection">Блюдо не выбрано</p>
+                            </div>
+                            
+                            <div class="order-category" id="salat-category" style="display: none;">
+                                <h4>Салат или стартер</h4>
+                                <p class="no-selection">Блюдо не выбрано</p>
+                            </div>
+                            
+                            <div class="order-category" id="drink-category" style="display: none;">
+                                <h4>Напиток</h4>
+                                <p class="no-selection">Блюдо не выбрано</p>
+                            </div>
+                            
+                            <div class="order-category" id="dessert-category" style="display: none;">
+                                <h4>Десерт</h4>
+                                <p class="no-selection">Блюдо не выбрано</p>
+                            </div>
+                            
+                            <div class="order-total" id="order-total" style="display: none;">
+                                <h4>Стоимость заказа</h4>
+                                <p class="total-price">0₽</p>
                             </div>
                         </div>
+                    </div>
                         
                         <!-- Скрытые поля для передачи данных выбранных блюд -->
                         <input type="hidden" id="selected-soup" name="selected_soup">
@@ -139,6 +154,12 @@
 
     <!-- Подключаем JavaScript файлы -->
    <!-- Подключаем JavaScript файлы -->
+<input type="hidden" id="selected-soup" name="selected_soup">
+<input type="hidden" id="selected-main" name="selected_main">
+<input type="hidden" id="selected-salat" name="selected_salat">
+<input type="hidden" id="selected-drink" name="selected_drink">
+<input type="hidden" id="selected-dessert" name="selected_dessert">
+<input type="hidden" id="total-price" name="total_price">
 <script src="./dishes.js"></script>
 <script src="./displayDishes.js"></script>
 <script src="./orderManager.js"></script>

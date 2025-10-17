@@ -9,7 +9,9 @@ function initializeOrderManager() {
     window.currentOrder = {
         soup: null,
         main: null,
-        drink: null
+        salat: null,
+        drink: null,
+        dessert: null
     };
     
     console.log('Current order initialized:', window.currentOrder);
@@ -76,7 +78,7 @@ function addDishToOrder(dishKeyword) {
 }
 
 function updateOrderDisplay() {
-    const categories = ['soup', 'main', 'drink'];
+    const categories = ['soup', 'main', 'salat', 'drink', 'dessert'];
     let hasAnySelection = false;
     let totalPrice = 0;
     
@@ -159,7 +161,9 @@ function resetOrder() {
     window.currentOrder = {
         soup: null,
         main: null,
-        drink: null
+        salat: null,
+        drink: null,
+        dessert: null
     };
     
     // Снимаем выделение со всех карточек
@@ -178,11 +182,16 @@ function updateFormData() {
     // Обновляем скрытые поля формы перед отправкой
     document.getElementById('selected-soup').value = window.currentOrder.soup ? window.currentOrder.soup.keyword : '';
     document.getElementById('selected-main').value = window.currentOrder.main ? window.currentOrder.main.keyword : '';
+    document.getElementById('selected-salat').value = window.currentOrder.salat ? window.currentOrder.salat.keyword : '';
     document.getElementById('selected-drink').value = window.currentOrder.drink ? window.currentOrder.drink.keyword : '';
+    document.getElementById('selected-dessert').value = window.currentOrder.dessert ? window.currentOrder.dessert.keyword : '';
     
     const totalPrice = (window.currentOrder.soup?.price || 0) + 
                       (window.currentOrder.main?.price || 0) + 
-                      (window.currentOrder.drink?.price || 0);
+                      (window.currentOrder.salat?.price || 0) +
+                      (window.currentOrder.drink?.price || 0) +
+                      (window.currentOrder.dessert?.price || 0);
+                      
     document.getElementById('total-price').value = totalPrice;
     
     console.log('Form data updated for submission');
