@@ -24,7 +24,7 @@ function validateOrder() {
     const currentOrder = window.currentOrder || {};
     
     // Проверяем, что есть хотя бы одно блюдо
-    const hasAnyDish = currentOrder.soup || currentOrder.main || currentOrder.salat || currentOrder.drink || currentOrder.dessert;
+    const hasAnyDish = currentOrder.soup || currentOrder.main || currentOrder.salad || currentOrder.drink || currentOrder.dessert;
     
     if (!hasAnyDish) {
         showNotification('Ничего не выбрано. Выберите блюда для заказа');
@@ -34,16 +34,16 @@ function validateOrder() {
     // Проверяем комбинации блюд
     
     // Комбо 1: Суп + Главное + Салат + Напиток
-    const combo1 = currentOrder.soup && currentOrder.main && currentOrder.salat && currentOrder.drink;
+    const combo1 = currentOrder.soup && currentOrder.main && currentOrder.salad && currentOrder.drink;
     
     // Комбо 2: Суп + Главное + Напиток
     const combo2 = currentOrder.soup && currentOrder.main && currentOrder.drink;
     
     // Комбо 3: Суп + Салат + Напиток
-    const combo3 = currentOrder.soup && currentOrder.salat && currentOrder.drink;
+    const combo3 = currentOrder.soup && currentOrder.salad && currentOrder.drink;
     
     // Комбо 4: Главное + Салат + Напиток
-    const combo4 = currentOrder.main && currentOrder.salat && currentOrder.drink;
+    const combo4 = currentOrder.main && currentOrder.salad && currentOrder.drink;
     
     // Комбо 5: Главное + Напиток
     const combo5 = currentOrder.main && currentOrder.drink;
@@ -53,26 +53,26 @@ function validateOrder() {
     
     if (!hasValidCombo) {
         // Определяем какое уведомление показать
-        if (currentOrder.soup && !currentOrder.main && !currentOrder.salat && !currentOrder.drink) {
+        if (currentOrder.soup && !currentOrder.main && !currentOrder.salad && !currentOrder.drink) {
             showNotification('Выберите главное блюдо/салат/стартер');
         }
-        else if (currentOrder.soup && (currentOrder.main || currentOrder.salat) && !currentOrder.drink) {
+        else if (currentOrder.soup && (currentOrder.main || currentOrder.salad) && !currentOrder.drink) {
             showNotification('Выберите напиток');
         }
-        else if (currentOrder.salat && !currentOrder.soup && !currentOrder.main && !currentOrder.drink) {
+        else if (currentOrder.salad && !currentOrder.soup && !currentOrder.main && !currentOrder.drink) {
             showNotification('Выберите суп или главное блюдо');
         }
-        else if ((currentOrder.drink || currentOrder.dessert) && !currentOrder.main && !currentOrder.soup && !currentOrder.salat) {
+        else if ((currentOrder.drink || currentOrder.dessert) && !currentOrder.main && !currentOrder.soup && !currentOrder.salad) {
             showNotification('Выберите главное блюдо');
         }
         else if (currentOrder.soup && currentOrder.main && !currentOrder.drink) {
             showNotification('Выберите напиток');
         }
         //объединить ветки с выберете напиток в 1 и выберете суп или галвное блюдо в 1
-        else if (currentOrder.soup && currentOrder.salat && !currentOrder.drink) {
+        else if (currentOrder.soup && currentOrder.salad && !currentOrder.drink) {
             showNotification('Выберите напиток');
         }
-        else if (currentOrder.main && currentOrder.salat && !currentOrder.drink) {
+        else if (currentOrder.main && currentOrder.salad && !currentOrder.drink) {
             showNotification('Выберите напиток');
         }
         else if (currentOrder.main && !currentOrder.drink) {

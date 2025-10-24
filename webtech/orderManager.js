@@ -9,7 +9,7 @@ function initializeOrderManager() {
     window.currentOrder = {
         soup: null,
         main: null,
-        salat: null,
+        salad: null,
         drink: null,
         dessert: null
     };
@@ -65,8 +65,30 @@ function addDishToOrder(dishKeyword) {
         return;
     }
     
-    // Определяем категорию блюда
-    const category = dish.category;
+    // Определяем категорию блюда с преобразованием серверных названий
+    let category;
+    switch(dish.category) {
+        case 'main-course':
+            category = 'main'; // преобразуем main-course в main
+            break;
+        case 'salad':
+            category = 'salad'; // оставляем как есть
+            break;
+        case 'soup':
+            category = 'soup'; // оставляем как есть
+            break;
+        case 'drink':
+            category = 'drink'; // оставляем как есть
+            break;
+        case 'dessert':
+            category = 'dessert'; // оставляем как есть
+            break;
+        default:
+            category = dish.category;
+            console.warn('Unknown category:', dish.category);
+    }
+    
+    console.log('Dish category converted:', dish.category, '→', category);
     
     // Обновляем заказ
     window.currentOrder[category] = dish;
@@ -78,7 +100,7 @@ function addDishToOrder(dishKeyword) {
 }
 
 function updateOrderDisplay() {
-    const categories = ['soup', 'main', 'salat', 'drink', 'dessert'];
+    const categories = ['soup', 'main', 'salad', 'drink', 'dessert'];
     let hasAnySelection = false;
     let totalPrice = 0;
     
@@ -161,7 +183,7 @@ function resetOrder() {
     window.currentOrder = {
         soup: null,
         main: null,
-        salat: null,
+        salad: null,
         drink: null,
         dessert: null
     };
@@ -182,13 +204,13 @@ function updateFormData() {
     // Обновляем скрытые поля формы перед отправкой
     document.getElementById('selected-soup').value = window.currentOrder.soup ? window.currentOrder.soup.keyword : '';
     document.getElementById('selected-main').value = window.currentOrder.main ? window.currentOrder.main.keyword : '';
-    document.getElementById('selected-salat').value = window.currentOrder.salat ? window.currentOrder.salat.keyword : '';
+    document.getElementById('selected-salad').value = window.currentOrder.salad ? window.currentOrder.salad.keyword : '';
     document.getElementById('selected-drink').value = window.currentOrder.drink ? window.currentOrder.drink.keyword : '';
     document.getElementById('selected-dessert').value = window.currentOrder.dessert ? window.currentOrder.dessert.keyword : '';
     
     const totalPrice = (window.currentOrder.soup?.price || 0) + 
                       (window.currentOrder.main?.price || 0) + 
-                      (window.currentOrder.salat?.price || 0) +
+                      (window.currentOrder.salad?.price || 0) +
                       (window.currentOrder.drink?.price || 0) +
                       (window.currentOrder.dessert?.price || 0);
                       
@@ -203,23 +225,23 @@ function validateOrderCombination() {
     // Проверяем основные блюда
     const hasSoup = !!currentOrder.soup;
     const hasMain = !!currentOrder.main;
-    const hasSalat = !!currentOrder.salat;
+    const hasSalad = !!currentOrder.salad;
     const hasDrink = !!currentOrder.drink;
     const hasDessert = !!currentOrder.dessert;
     
-    console.log('Order validation:', { hasSoup, hasMain, hasSalat, hasDrink, hasDessert });
+    console.log('Order validation:', { hasSoup, hasMain, hasSalad, hasDrink, hasDessert });
     
     // Комбо 1: Суп + Главное + Салат + Напиток
-    const combo1 = hasSoup && hasMain && hasSalat && hasDrink;
+    const combo1 = hasSoup && hasMain && hasSalad && hasDrink;
     
     // Комбо 2: Суп + Главное + Напиток
     const combo2 = hasSoup && hasMain && hasDrink;
     
     // Комбо 3: Суп + Салат + Напиток
-    const combo3 = hasSoup && hasSalat && hasDrink;
+    const combo3 = hasSoup && hasSalad && hasDrink;
     
     // Комбо 4: Главное + Салат + Напиток
-    const combo4 = hasMain && hasSalat && hasDrink;
+    const combo4 = hasMain && hasSalad && hasDrink;
     
     // Комбо 5: Главное + Напиток
     const combo5 = hasMain && hasDrink;

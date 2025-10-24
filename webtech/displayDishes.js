@@ -1,29 +1,46 @@
 // displayDishes.js
 document.addEventListener('DOMContentLoaded', function() {
-    // ВМЕСТО: displayDishes();
-    // СТАЛО: 
     loadDishes().then(() => {
         displayDishes();
         initializeFilters();
     }).catch(error => {
         console.error('Не удалось загрузить меню:', error);
-        // Можно показать fallback данные или сообщение об ошибке
     });
 });
 
-// ВСЁ ОСТАЛЬНОЕ БЕЗ ИЗМЕНЕНИЙ!
 function displayDishes() {
+    console.log('Displaying dishes...');
+    
+    if (!dishes || dishes.length === 0) {
+        console.error('Dishes array is empty or not defined');
+        return;
+    }
+    
     // Сортируем блюда по алфавиту
     const sortedDishes = [...dishes].sort((a, b) => a.name.localeCompare(b.name));
     
-    // Группируем блюда по категориям
+    // Группируем блюда по категориям (ИСПРАВЛЕННЫЕ НАЗВАНИЯ)
     const dishesByCategory = {
         soup: sortedDishes.filter(dish => dish.category === 'soup'),
-        main: sortedDishes.filter(dish => dish.category === 'main'),
-        salat: sortedDishes.filter(dish => dish.category === 'salat'),
+        main: sortedDishes.filter(dish => dish.category === 'main-course'), // ИСПРАВЛЕНО
+        salat: sortedDishes.filter(dish => dish.category === 'salad'), // ИСПРАВЛЕНО
         drink: sortedDishes.filter(dish => dish.category === 'drink'),
         dessert: sortedDishes.filter(dish => dish.category === 'dessert')
     };
+    
+    console.log('Dishes by category:', {
+        soup: dishesByCategory.soup.length,
+        main: dishesByCategory.main.length,
+        salat: dishesByCategory.salat.length,
+        drink: dishesByCategory.drink.length,
+        dessert: dishesByCategory.dessert.length
+    });
+    
+    // Очищаем main
+    const mainElement = document.querySelector('main');
+    if (mainElement) {
+        mainElement.innerHTML = '<h1>Собрать ланч</h1>';
+    }
     
     // Отображаем блюда для каждой категории
     displayCategoryWithFilters('soup', 'Выберите суп', dishesByCategory.soup, [
@@ -56,7 +73,6 @@ function displayDishes() {
     ]);
 }
 
-// Остальные функции БЕЗ ИЗМЕНЕНИЙ...
 
 function displayCategoryWithFilters(category, title, dishes, filters) {
     const mainElement = document.querySelector('main');
