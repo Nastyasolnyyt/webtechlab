@@ -1,23 +1,22 @@
 // displayDishes.js
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('DOM loaded, starting to display dishes...');
-    displayDishes();
-    initializeFilters();
+    // ВМЕСТО: displayDishes();
+    // СТАЛО: 
+    loadDishes().then(() => {
+        displayDishes();
+        initializeFilters();
+    }).catch(error => {
+        console.error('Не удалось загрузить меню:', error);
+        // Можно показать fallback данные или сообщение об ошибке
+    });
 });
 
+// ВСЁ ОСТАЛЬНОЕ БЕЗ ИЗМЕНЕНИЙ!
 function displayDishes() {
-    console.log('Displaying dishes...');
-    
-    // Проверяем, есть ли массив dishes
-    if (!dishes || dishes.length === 0) {
-        console.error('Dishes array is empty or not defined');
-        return;
-    }
-    
-    // СОРТИРУЕМ ВСЕ БЛЮДА ПО АЛФАВИТУ
+    // Сортируем блюда по алфавиту
     const sortedDishes = [...dishes].sort((a, b) => a.name.localeCompare(b.name));
     
-    // Группируем ОТСОРТИРОВАННЫЕ блюда по категориям
+    // Группируем блюда по категориям
     const dishesByCategory = {
         soup: sortedDishes.filter(dish => dish.category === 'soup'),
         main: sortedDishes.filter(dish => dish.category === 'main'),
@@ -25,8 +24,6 @@ function displayDishes() {
         drink: sortedDishes.filter(dish => dish.category === 'drink'),
         dessert: sortedDishes.filter(dish => dish.category === 'dessert')
     };
-    
-    console.log('Dishes by category:', dishesByCategory);
     
     // Отображаем блюда для каждой категории
     displayCategoryWithFilters('soup', 'Выберите суп', dishesByCategory.soup, [
@@ -58,6 +55,8 @@ function displayDishes() {
         { name: 'большая порция', kind: 'large' }
     ]);
 }
+
+// Остальные функции БЕЗ ИЗМЕНЕНИЙ...
 
 function displayCategoryWithFilters(category, title, dishes, filters) {
     const mainElement = document.querySelector('main');
