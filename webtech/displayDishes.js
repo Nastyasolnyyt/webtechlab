@@ -14,13 +14,16 @@ function displayDishes() {
         return;
     }
     
-    // Группируем блюда по категориям
+    // СОРТИРУЕМ ВСЕ БЛЮДА ПО АЛФАВИТУ
+    const sortedDishes = [...dishes].sort((a, b) => a.name.localeCompare(b.name));
+    
+    // Группируем ОТСОРТИРОВАННЫЕ блюда по категориям
     const dishesByCategory = {
-        soup: dishes.filter(dish => dish.category === 'soup'),
-        main: dishes.filter(dish => dish.category === 'main'),
-        salat: dishes.filter(dish => dish.category === 'salat'),
-        drink: dishes.filter(dish => dish.category === 'drink'),
-        dessert: dishes.filter(dish => dish.category === 'dessert')
+        soup: sortedDishes.filter(dish => dish.category === 'soup'),
+        main: sortedDishes.filter(dish => dish.category === 'main'),
+        salat: sortedDishes.filter(dish => dish.category === 'salat'),
+        drink: sortedDishes.filter(dish => dish.category === 'drink'),
+        dessert: sortedDishes.filter(dish => dish.category === 'dessert')
     };
     
     console.log('Dishes by category:', dishesByCategory);
@@ -94,7 +97,7 @@ function displayCategoryWithFilters(category, title, dishes, filters) {
     grid.className = 'dishes-grid';
     grid.id = `${category}-grid`;
     
-    // Создаем карточки для каждого блюда
+    // Блюда уже отсортированы, просто создаем карточки
     dishes.forEach(dish => {
         const dishCard = createDishCard(dish);
         grid.appendChild(dishCard);
@@ -144,7 +147,7 @@ function toggleFilter(filterBtn, kind, category) {
     // Если фильтр уже активен - снимаем фильтр
     if (filterBtn.classList.contains('active')) {
         filterBtn.classList.remove('active');
-        // Показываем все блюда
+        // Показываем все блюда (они остаются отсортированными)
         allDishes.forEach(dish => {
             dish.style.display = 'block';
         });
@@ -157,7 +160,7 @@ function toggleFilter(filterBtn, kind, category) {
         // Добавляем активный класс к выбранному фильтру
         filterBtn.classList.add('active');
         
-        // Фильтруем блюда
+        // Фильтруем блюда (отфильтрованные блюда остаются в алфавитном порядке)
         allDishes.forEach(dish => {
             if (dish.getAttribute('data-kind') === kind) {
                 dish.style.display = 'block';

@@ -160,7 +160,7 @@ const dishes = [
     },
     {
         keyword: "salat_tomato_cheese",
-        name: "Салат с тофу шпинатом и помидорами",
+        name: "Салат с тофу, шпинатом и помидорами",
         price: 140,
         category: "salat",
         count: "250 г",
@@ -171,7 +171,7 @@ const dishes = [
     // Напитки - холодные
     {
         keyword: "orange_juice",
-        name: "Апельсиновый фреш",
+        name: "Яблочный сок",
         price: 120,
         category: "drink",
         count: "300 мл",
@@ -180,7 +180,7 @@ const dishes = [
     },
     {
         keyword: "cranberry_juice",
-        name: "Клюквенный морс",
+        name: "Манговый сок",
         price: 90,
         category: "drink",
         count: "300 мл",

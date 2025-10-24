@@ -68,6 +68,7 @@ function validateOrder() {
         else if (currentOrder.soup && currentOrder.main && !currentOrder.drink) {
             showNotification('Выберите напиток');
         }
+        //объединить ветки с выберете напиток в 1 и выберете суп или галвное блюдо в 1
         else if (currentOrder.soup && currentOrder.salat && !currentOrder.drink) {
             showNotification('Выберите напиток');
         }
