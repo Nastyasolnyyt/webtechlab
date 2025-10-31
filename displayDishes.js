@@ -19,11 +19,11 @@ function displayDishes() {
     // Сортируем блюда по алфавиту
     const sortedDishes = [...dishes].sort((a, b) => a.name.localeCompare(b.name));
     
-    // Группируем блюда по категориям (ИСПРАВЛЕННЫЕ НАЗВАНИЯ)
+    // Группируем блюда по категориям
     const dishesByCategory = {
         soup: sortedDishes.filter(dish => dish.category === 'soup'),
-        main: sortedDishes.filter(dish => dish.category === 'main-course'), // ИСПРАВЛЕНО
-        salat: sortedDishes.filter(dish => dish.category === 'salad'), // ИСПРАВЛЕНО
+        main: sortedDishes.filter(dish => dish.category === 'main-course'),
+        salat: sortedDishes.filter(dish => dish.category === 'salad'),
         drink: sortedDishes.filter(dish => dish.category === 'drink'),
         dessert: sortedDishes.filter(dish => dish.category === 'dessert')
     };

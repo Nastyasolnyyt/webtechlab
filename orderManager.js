@@ -16,87 +16,144 @@ function initializeOrderManager() {
     
     console.log('Current order initialized:', window.currentOrder);
     
+    // Загружаем сохраненный заказ при инициализации (если storageManager доступен)
+    if (typeof storageManager !== 'undefined') {
+        loadSavedOrder().then(() => {
+            console.log('✅ Заказ загружен из localStorage');
+        }).catch(error => {
+            console.error('❌ Ошибка загрузки заказа:', error);
+        });
+    }
+    
     // Добавляем обработчики событий для карточек блюд
     document.addEventListener('click', function(e) {
-        // Обрабатываем клик по карточке или кнопке "Добавить"
         const dishCard = e.target.closest('.dish-card');
         if (dishCard) {
             const dishKeyword = dishCard.getAttribute('data-dish');
             console.log('Dish clicked:', dishKeyword);
             addDishToOrder(dishKeyword);
-            
-            // Добавляем визуальное выделение
             highlightSelectedDish(dishCard, dishKeyword);
         }
     });
     
     // Обработчик для сброса формы
-    document.querySelector('.reset-btn').addEventListener('click', function() {
-        console.log('Reset button clicked');
-        resetOrder();
-    });
+    const resetBtn = document.querySelector('.reset-btn');
+    if (resetBtn) {
+        resetBtn.addEventListener('click', function() {
+            console.log('Reset button clicked');
+            resetOrder();
+        });
+    }
+}
+
+// Загрузить сохраненный заказ (только если storageManager доступен)
+async function loadSavedOrder() {
+    if (typeof storageManager === 'undefined') {
+        console.log('StorageManager не доступен');
+        return;
+    }
     
-    // Обработчик для отправки формы
-    document.getElementById('order-form').addEventListener('submit', function(e) {
-        console.log('Form submitted');
-        updateFormData();
-    });
+    try {
+        const fullOrder = await storageManager.restoreFullOrder();
+        if (fullOrder) {
+            window.currentOrder = fullOrder;
+            console.log('✅ Заказ восстановлен из localStorage');
+        }
+        
+        // Обновляем отображение
+        updateOrderDisplay();
+        highlightSavedDishes();
+        
+    } catch (error) {
+        console.error('❌ Ошибка загрузки заказа:', error);
+    }
+}
+
+// Подсветить сохраненные блюда на странице
+function highlightSavedDishes() {
+    if (!window.currentOrder) return;
+    
+    // Ждем пока DOM полностью загрузится
+    setTimeout(() => {
+        Object.keys(window.currentOrder).forEach(category => {
+            const dish = window.currentOrder[category];
+            if (dish && dish.keyword) {
+                const dishCard = document.querySelector(`[data-dish="${dish.keyword}"]`);
+                if (dishCard) {
+                    dishCard.classList.add('selected');
+                    console.log(`✅ Подсвечено блюдо: ${dish.name}`);
+                }
+            }
+        });
+    }, 100);
 }
 
 function highlightSelectedDish(selectedCard, dishKeyword) {
-    // Находим секцию, к которой принадлежит карточка
     const section = selectedCard.closest('section');
+    if (!section) return;
     
-    // Снимаем выделение со всех карточек в этой секции
     const allCardsInSection = section.querySelectorAll('.dish-card');
     allCardsInSection.forEach(card => {
         card.classList.remove('selected');
     });
-    
-    // Добавляем выделение выбранной карточке
     selectedCard.classList.add('selected');
-    console.log('Highlighted dish:', dishKeyword);
 }
 
 function addDishToOrder(dishKeyword) {
-    const dish = dishes.find(d => d.keyword === dishKeyword);
-    if (!dish) {
-        console.error('Dish not found:', dishKeyword);
+    // Проверяем, что массив dishes загружен
+    if (!dishes || dishes.length === 0) {
+        console.error('❌ Массив dishes не загружен');
         return;
     }
+    
+    const dish = dishes.find(d => d.keyword === dishKeyword);
+    if (!dish) {
+        console.error('❌ Dish not found:', dishKeyword);
+        return;
+    }
+    
+    console.log('✅ Найдено блюдо:', dish.name, 'Категория:', dish.category);
     
     // Определяем категорию блюда с преобразованием серверных названий
     let category;
     switch(dish.category) {
         case 'main-course':
-            category = 'main'; // преобразуем main-course в main
+            category = 'main';
             break;
         case 'salad':
-            category = 'salad'; // оставляем как есть
+            category = 'salad';
             break;
         case 'soup':
-            category = 'soup'; // оставляем как есть
+            category = 'soup';
             break;
         case 'drink':
-            category = 'drink'; // оставляем как есть
+            category = 'drink';
             break;
         case 'dessert':
-            category = 'dessert'; // оставляем как есть
+            category = 'dessert';
             break;
         default:
             category = dish.category;
-            console.warn('Unknown category:', dish.category);
+            console.warn('⚠️ Unknown category:', dish.category);
     }
     
-    console.log('Dish category converted:', dish.category, '→', category);
+    console.log(`🔄 Категория преобразована: ${dish.category} → ${category}`);
     
     // Обновляем заказ
     window.currentOrder[category] = dish;
     
-    console.log('Order updated:', window.currentOrder);
+    // Сохраняем в localStorage (если storageManager доступен)
+    if (typeof storageManager !== 'undefined') {
+        storageManager.saveOrder(window.currentOrder);
+        console.log('💾 Заказ сохранен в localStorage');
+    }
     
-    // Обновляем отображение заказа
     updateOrderDisplay();
+    
+    // Обновляем панель оформления (если функция доступна)
+    if (typeof updateCheckoutPanel !== 'undefined') {
+        updateCheckoutPanel();
+    }
 }
 
 function updateOrderDisplay() {
@@ -108,6 +165,7 @@ function updateOrderDisplay() {
     categories.forEach(category => {
         if (window.currentOrder[category]) {
             hasAnySelection = true;
+            totalPrice += window.currentOrder[category].price;
         }
     });
     
@@ -115,21 +173,29 @@ function updateOrderDisplay() {
     
     if (!hasAnySelection) {
         // Если ничего не выбрано
-        noSelectionMessage.style.display = 'block';
+        if (noSelectionMessage) {
+            noSelectionMessage.style.display = 'block';
+        }
         categories.forEach(category => {
-            document.getElementById(`${category}-category`).style.display = 'none';
+            const element = document.getElementById(`${category}-category`);
+            if (element) element.style.display = 'none';
         });
-        document.getElementById('order-total').style.display = 'none';
-        console.log('No selection - hiding categories');
+        const orderTotal = document.getElementById('order-total');
+        if (orderTotal) orderTotal.style.display = 'none';
+        console.log('📭 No selection - hiding categories');
         return;
     }
     
     // Если есть выбранные блюда, скрываем общее сообщение
-    noSelectionMessage.style.display = 'none';
+    if (noSelectionMessage) {
+        noSelectionMessage.style.display = 'none';
+    }
     
     // Обновляем каждую категорию
     categories.forEach(category => {
         const categoryElement = document.getElementById(`${category}-category`);
+        if (!categoryElement) return;
+        
         const noSelectionElement = categoryElement.querySelector('.no-selection');
         const selectedDish = window.currentOrder[category];
         
@@ -137,10 +203,10 @@ function updateOrderDisplay() {
         categoryElement.style.display = 'block';
         
         if (selectedDish) {
-            totalPrice += selectedDish.price;
-            
             // Скрываем сообщение "Блюдо не выбрано"
-            noSelectionElement.style.display = 'none';
+            if (noSelectionElement) {
+                noSelectionElement.style.display = 'none';
+            }
             
             // Создаем или обновляем отображение выбранного блюда
             let selectedElement = categoryElement.querySelector('.selected-dish');
@@ -157,7 +223,9 @@ function updateOrderDisplay() {
             selectedElement.style.display = 'flex';
         } else {
             // Показываем сообщение "Блюдо не выбрано"
-            noSelectionElement.style.display = 'block';
+            if (noSelectionElement) {
+                noSelectionElement.style.display = 'block';
+            }
             
             // Скрываем элемент с выбранным блюдом, если он есть
             const selectedElement = categoryElement.querySelector('.selected-dish');
@@ -169,12 +237,13 @@ function updateOrderDisplay() {
     
     // Обновляем общую стоимость
     const orderTotalElement = document.getElementById('order-total');
-    const totalPriceElement = orderTotalElement.querySelector('.total-price');
-    
-    if (hasAnySelection) {
-        totalPriceElement.textContent = `${totalPrice}₽`;
-        orderTotalElement.style.display = 'block';
-        console.log('Total price updated:', totalPrice);
+    if (orderTotalElement) {
+        const totalPriceElement = orderTotalElement.querySelector('.total-price');
+        if (totalPriceElement) {
+            totalPriceElement.textContent = `${totalPrice}₽`;
+            orderTotalElement.style.display = 'block';
+            console.log('💰 Total price updated:', totalPrice);
+        }
     }
 }
 
@@ -188,35 +257,59 @@ function resetOrder() {
         dessert: null
     };
     
+    // Очищаем localStorage (если storageManager доступен)
+    if (typeof storageManager !== 'undefined') {
+        storageManager.clearOrder();
+    }
+    
     // Снимаем выделение со всех карточек
     const allCards = document.querySelectorAll('.dish-card');
     allCards.forEach(card => {
         card.classList.remove('selected');
     });
     
-    console.log('Order reset');
+    console.log('🔄 Order reset');
     
     // Обновляем отображение заказа
     updateOrderDisplay();
+    
+    // Обновляем панель оформления (если функция доступна)
+    if (typeof updateCheckoutPanel !== 'undefined') {
+        updateCheckoutPanel();
+    }
 }
 
 function updateFormData() {
-    // Обновляем скрытые поля формы перед отправкой
-    document.getElementById('selected-soup').value = window.currentOrder.soup ? window.currentOrder.soup.keyword : '';
-    document.getElementById('selected-main').value = window.currentOrder.main ? window.currentOrder.main.keyword : '';
-    document.getElementById('selected-salad').value = window.currentOrder.salad ? window.currentOrder.salad.keyword : '';
-    document.getElementById('selected-drink').value = window.currentOrder.drink ? window.currentOrder.drink.keyword : '';
-    document.getElementById('selected-dessert').value = window.currentOrder.dessert ? window.currentOrder.dessert.keyword : '';
+    // Эта функция теперь используется только на странице оформления заказа
+    // Проверяем существование элементов перед обновлением
+    
+    const elements = {
+        'selected-soup': window.currentOrder.soup ? window.currentOrder.soup.keyword : '',
+        'selected-main': window.currentOrder.main ? window.currentOrder.main.keyword : '',
+        'selected-salad': window.currentOrder.salad ? window.currentOrder.salad.keyword : '',
+        'selected-drink': window.currentOrder.drink ? window.currentOrder.drink.keyword : '',
+        'selected-dessert': window.currentOrder.dessert ? window.currentOrder.dessert.keyword : ''
+    };
+    
+    Object.keys(elements).forEach(id => {
+        const element = document.getElementById(id);
+        if (element) {
+            element.value = elements[id];
+        }
+    });
     
     const totalPrice = (window.currentOrder.soup?.price || 0) + 
                       (window.currentOrder.main?.price || 0) + 
                       (window.currentOrder.salad?.price || 0) +
                       (window.currentOrder.drink?.price || 0) +
                       (window.currentOrder.dessert?.price || 0);
-                      
-    document.getElementById('total-price').value = totalPrice;
     
-    console.log('Form data updated for submission');
+    const totalPriceElement = document.getElementById('total-price');
+    if (totalPriceElement) {
+        totalPriceElement.value = totalPrice;
+    }
+    
+    console.log('📊 Form data updated for submission');
 }
 
 function validateOrderCombination() {
@@ -229,12 +322,12 @@ function validateOrderCombination() {
     const hasDrink = !!currentOrder.drink;
     const hasDessert = !!currentOrder.dessert;
     
-    console.log('Order validation:', { hasSoup, hasMain, hasSalad, hasDrink, hasDessert });
+    console.log('🔍 Order validation:', { hasSoup, hasMain, hasSalad, hasDrink, hasDessert });
     
     // Комбо 1: Суп + Главное + Салат + Напиток
     const combo1 = hasSoup && hasMain && hasSalad && hasDrink;
     
-    // Комбо 2: Суп + Главное + Напиток
+    // Комbo 2: Суп + Главное + Напиток
     const combo2 = hasSoup && hasMain && hasDrink;
     
     // Комбо 3: Суп + Салат + Напиток
@@ -249,7 +342,19 @@ function validateOrderCombination() {
     // Десерт можно добавить к любому комбо
     const hasValidCombo = combo1 || combo2 || combo3 || combo4 || combo5;
     
-    console.log('Valid combo found:', hasValidCombo);
+    console.log('✅ Valid combo found:', hasValidCombo);
     
     return hasValidCombo;
+}
+
+// Экспортируем функции для использования в других файлах
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = {
+        initializeOrderManager,
+        addDishToOrder,
+        resetOrder,
+        updateOrderDisplay,
+        validateOrderCombination,
+        updateFormData
+    };
 }

@@ -15,7 +15,8 @@
             <nav>
                 <a href="index.html" class="nav-link">Главная</a>
                 <a href="lab2.html" class="nav-link active">Собрать ланч</a>
-                <a href="#" class="nav-link">Заказы</a>
+                <a href="order.html" class="nav-link">Оформить заказ</a>
+                <a href="#myorder" class="nav-link">Заказы</a>
                 <a href="#contacts" class="nav-link">Контакты</a>
             </nav>
         </div>
@@ -121,123 +122,7 @@
                 
             </div>
         </section>
-    
-    <!-- Форма заказа -->
-    <section class="order-form-section">
-        <div class="order-container">
-            <h2>Сделать заказ</h2>
-            
-            <form id="order-form" action="https://httpbin.org/post" method="POST">
-                <div class="form-columns">
-                    <!-- Блок с заказом -->
-                    <div class="order-block">
-                        <h3>Ваш заказ</h3>
-                        
-                        <!-- Динамическое отображение выбранных блюд -->
-                       <div id="order-display">
-                            <div class="order-summary">
-                                <p class="no-selection-message">Ничего не выбрано</p>
-                                
-                                <div class="order-category" id="soup-category" style="display: none;">
-                                    <h4>Суп</h4>
-                                    <p class="no-selection">Блюдо не выбрано</p>
-                                </div>
-                                
-                                <div class="order-category" id="main-category" style="display: none;">
-                                    <h4>Главное блюдо</h4>
-                                    <p class="no-selection">Блюдо не выбрано</p>
-                                </div>
-                                
-                                <div class="order-category" id="salad-category" style="display: none;"> <!-- ИСПРАВЛЕНО: salad вместо salat -->
-                                    <h4>Салат или стартер</h4>
-                                    <p class="no-selection">Блюдо не выбрано</p>
-                                </div>
-                                
-                                <div class="order-category" id="drink-category" style="display: none;">
-                                    <h4>Напиток</h4>
-                                    <p class="no-selection">Блюдо не выбрано</p>
-                                </div>
-                                
-                                <div class="order-category" id="dessert-category" style="display: none;">
-                                    <h4>Десерт</h4>
-                                    <p class="no-selection">Блюдо не выбрано</p>
-                                </div>
-                                
-                                <div class="order-total" id="order-total" style="display: none;">
-                                    <h4>Стоимость заказа</h4>
-                                    <p class="total-price">0₽</p>
-                                </div>
-                            </div>
-                        </div>
-                                                
-                        <!-- Скрытые поля для передачи данных выбранных блюд -->
-                        <input type="hidden" id="selected-soup" name="selected_soup">
-                        <input type="hidden" id="selected-main" name="selected_main">
-                        <input type="hidden" id="selected-drink" name="selected_drink">
-                        <input type="hidden" id="total-price" name="total_price">
-                        
-                        <div class="form-group">
-                            <label for="comments">Комментарии к заказу</label>
-                            <textarea id="comments" name="comments" rows="4" placeholder="Ваши пожелания к заказу..."></textarea>
-                        </div>
-                    </div>
-                    
-                    <!-- Блок с данными клиента -->
-                    <div class="customer-block">
-                        <h3>Ваши данные</h3>
-                        
-                        <div class="form-group">
-                            <label for="name">Имя *</label>
-                            <input type="text" id="name" name="name" required>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="email">Email *</label>
-                            <input type="email" id="email" name="email" required>
-                        </div>
-                        
-                        <div class="form-group checkbox-group">
-                            <input type="checkbox" id="newsletter" name="newsletter" checked>
-                            <label for="newsletter">Получать информацию о скидках и акциях</label>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="phone">Номер телефона *</label>
-                            <input type="tel" id="phone" name="phone" required>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="address">Адрес доставки *</label>
-                            <input type="text" id="address" name="address" required placeholder="Доставка осуществляется только по Москве">
-                        </div>
-                        
-                       <div class="form-group">
-                        <label>Время доставки:</label>
-                        <div class="radio-group">
-                            <div class="radio-option">
-                                <input type="radio" id="delivery-time-now" name="delivery_time_option" value="now" required>
-                                <label for="delivery-time-now">Как можно скорее</label>
-                            </div>
-                            <div class="radio-option">
-                                <input type="radio" id="delivery-time-specific" name="delivery_time_option" value="specific" required>
-                                <label for="delivery-time-specific">К указанному времени</label>
-                            </div>
-                        </div>
-                        
-                        <label for="delivery-time">Укажите время доставки</label>
-                        <input type="time" id="delivery-time" name="delivery_time" min="07:00" max="23:00" step="300">
-                    </div>
-                    </div>
-                </div>
-                
-                <div class="form-buttons">
-                    <button type="reset" class="reset-btn">Сбросить</button>
-                    <button type="submit" class="submit-btn">Отправить заказ</button>
-                </div>
-            </form>
-        </div>
-    </section>
-
+   
     <footer id="contacts">
         <div class="footer-content">
             <p>2025 Solntseva Nastya Food Construct</p>
@@ -258,6 +143,9 @@
 <script src="./dishes.js"></script>
 <script src="./displayDishes.js"></script>
 <script src="./orderManager.js"></script>
-<script src="validation.js"></script>
+<script src="./validation.js"></script>
+<script src="./storageManager.js"></script>
+<script src="./orderManager.js"></script>
+<script src="./checkoutPanel.js"></script>
 </body>
 </html>

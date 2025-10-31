@@ -56,7 +56,7 @@ function validateOrder() {
         if (currentOrder.soup && !currentOrder.main && !currentOrder.salad && !currentOrder.drink) {
             showNotification('Выберите главное блюдо/салат/стартер');
         }
-        else if (currentOrder.soup && (currentOrder.main || currentOrder.salad) && !currentOrder.drink) {
+        else if ((currentOrder.soup && (currentOrder.main || currentOrder.salad) && !currentOrder.drink) || (currentOrder.soup && currentOrder.main && !currentOrder.drink) || (currentOrder.soup && currentOrder.salad && !currentOrder.drink) || (currentOrder.main && currentOrder.salad && !currentOrder.drink) || (currentOrder.main && !currentOrder.drink)){
             showNotification('Выберите напиток');
         }
         else if (currentOrder.salad && !currentOrder.soup && !currentOrder.main && !currentOrder.drink) {
@@ -65,19 +65,7 @@ function validateOrder() {
         else if ((currentOrder.drink || currentOrder.dessert) && !currentOrder.main && !currentOrder.soup && !currentOrder.salad) {
             showNotification('Выберите главное блюдо');
         }
-        else if (currentOrder.soup && currentOrder.main && !currentOrder.drink) {
-            showNotification('Выберите напиток');
-        }
-        //объединить ветки с выберете напиток в 1 и выберете суп или галвное блюдо в 1
-        else if (currentOrder.soup && currentOrder.salad && !currentOrder.drink) {
-            showNotification('Выберите напиток');
-        }
-        else if (currentOrder.main && currentOrder.salad && !currentOrder.drink) {
-            showNotification('Выберите напиток');
-        }
-        else if (currentOrder.main && !currentOrder.drink) {
-            showNotification('Выберите напиток');
-        }
+        
         else {
             showNotification('Выберите суп или главное блюдо');
         }
